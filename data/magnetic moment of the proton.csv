@@ -1,0 +1,8 @@
+﻿year,author,method,field,estimate,error,error_ppm
+1949,"Sommer, Thomas, & Hipple",Omegatron,0.47,2.79269,0.00003,11
+1956,"Trigger, Jeffries, & Bloch",Inverse Cyclotron,"0.53, 0.7, 0.96",2.79267,0.0001,36
+1963,"Sanders, Tuberfield, Collington, and Dellis",Inverse Cyclotron,0.24,2.792701,0.000073,26
+1961,Boyne & Franken,Cyclotron,0.8-1.3,2.792832,0.000055,20
+1965,Mamyrin & Frantsuzov,Mass Spectrometer,0.13,2.792794,0.000017,6.2
+1967,Petley & Morris,Omegatron,0.47,2.792746,0.000052,19
+1967,Marion & Winkler,Nuclear Reaction Energies,,2.79226,0.00013,45

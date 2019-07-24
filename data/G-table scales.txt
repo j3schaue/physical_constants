@@ -1,0 +1,6 @@
+table 1: 10^11 m^3 kg^-1 s^-2
+table 2: 10^11 m^3 kg^-1 s^-2
+table 3: km^3 s^-2
+
+
+https://www.bipm.org/utils/common/pdf/rapportBIPM/1983/01.pdf
