@@ -20,3 +20,7 @@ Sources for data:
 * Gravitational Constant G: Gillies (1983), p. 4-6
 * Speed of Light: see data
 * Recommended Values: see data
+
+
+TO DO: 
+Update recommended values tables for the constants in H&F 1986 through the present (or at least through 2014).
