@@ -23,4 +23,4 @@ Sources for data:
 
 
 TO DO: 
-Update recommended values tables for the constants in H&F 1986 through the present (or at least through 2014).
+Update recommended values tables for the constants in H&F 1986 through the present (or at least through 2014). A good place to start may be the review by [Olive, et al. (2014)](http://pdg.lbl.gov/2014/download/rpp2014-Chin.Phys.C.38.090001.pdf).
