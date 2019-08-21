@@ -61,14 +61,29 @@ recvalPlot = function(cnstnt, lab_title, data = rvs, plot_theme = stdtheme, ref 
       
     }
     
+    dat <- dplyr::filter(data, constant == cnstnt)
+    
+    min_year = dat %>% 
+      summarize(min_yr = min(year))
+    min_yr = as.numeric(as.character(min_year$min_yr))
+    
+    range_vals <- dat %>% 
+      summarize(range = max(estimate) - min(estimate))
+    nudge <- range_vals$range/nrow(dat)/10
+    
     # add reference line to the plot
-    plt = plt + geom_hline(yintercept = ref_val, lty = 2)
+    plt = plt + geom_hline(yintercept = ref_val, lty = 2) + 
+      annotate(geom = "text", 
+               x = min_yr, y = ref_val + nudge, 
+               label = paste0(ref, " Recommended Value"), 
+               hjust = 0, vjust = 0)
   
   }
   
   ########## RETURN
   return(plt)
 }
+
 
 
 ##-------------------------------------------------------------------------------##
