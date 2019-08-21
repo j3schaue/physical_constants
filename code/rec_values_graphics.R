@@ -53,12 +53,16 @@ recvalPlot = function(cnstnt, lab_title, data = rvs, plot_theme = stdtheme, ref 
     if(is.na(ref)){ # check that a reference value has been specified
       
       # if no reference value has been specified, use the 1973 value
-      ref = dplyr::filter(data, constant == cnstnt, year == 1973)$estimate
+      ref_val = dplyr::filter(data, constant == cnstnt, year == 1973)$estimate
     
+    } else {
+      
+      ref_val = dplyr::filter(data, constant == cnstnt, year == ref)$estimate
+      
     }
     
     # add reference line to the plot
-    plt = plt + geom_hline(yintercept = ref, lty = 2)
+    plt = plt + geom_hline(yintercept = ref_val, lty = 2)
   
   }
   
@@ -72,15 +76,16 @@ recvalPlot = function(cnstnt, lab_title, data = rvs, plot_theme = stdtheme, ref 
 ##-------------------------------------------------------------------------------##
 rvs = read.csv("./data/recommended values.csv")
 head(rvs)
+str(rvs)
 
 # Names list of constants in Fig 3, some names for the plots and filenames
 cnsts  = list(cnst = c("c", "N", "1/alpha", "h", "m_e", "e"),
-              name = c("Velocity of Light (c)",
+              name = c("Speed of Light (c)",
                        "Avogadro's Number (N)", 
                        expression("Inverse Fine Structure Constant ("~alpha^-1~")"),
                        "Planck's Constant (h)",
                        expression("Electron Mass ("~m[e]~")"),
-                       "Electron Charge (e)"),
+                       "Magnitude of Electron Charge (e)"),
               fname = paste0(c("speed_of_light",
                                "avogadro", 
                                "invFSC", 
@@ -95,13 +100,15 @@ cnsts  = list(cnst = c("c", "N", "1/alpha", "h", "m_e", "e"),
 ## Build plots
 ##-------------------------------------------------------------------------------##
 for(i in 1:length(cnsts$cnst)){
-  cc = cnsts$cnst[i]
-  labtitle = cnsts$name[i]
-  fname = cnsts$fname[i]
-  foo = recvalPlot(cc, labtitle, include_refline = FALSE)
-  show(foo)
+  cc = cnsts$cnst[i] # Constnat name
+  labtitle = cnsts$name[i] # plot title
+  fname = cnsts$fname[i] # file name
+  foo = recvalPlot(cc, labtitle, include_refline = TRUE, ref = 2014) # build plot using 2014 reference value
+  show(foo) # show the plot
+  
+  # save plot
   ggsave(plot = foo,
-         filename = paste0("./graphics/", fname),
+         filename = paste0("./graphics/", gsub(".pdf", "_updated.pdf", fname)),
          width = 12, height = 10)
 }
 
