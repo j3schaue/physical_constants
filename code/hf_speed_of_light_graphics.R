@@ -65,8 +65,9 @@ birgeRatio <- function(t, v, true_mean = NA){
 cdat = read.csv("./data/speed of light.csv")
 head(cdat)
 
-# 1984 value used in H&F
-c1984 = 299792.458
+# 2014 value used in H&F
+rec_val = 2.997925 * 10^5
+rec_val_year = 2014
 
 # Birge ratios don't seem to line up exactly...
 cdat %>% 
@@ -76,8 +77,8 @@ cdat %>%
                         estimate_orig)) %>%
   summarize(br = birgeRatio(est, sd^2),
             br_adj = birgeRatio(estimate_adj, sd^2), 
-            br_tm = birgeRatio(est, sd^2, c1984), 
-            br_tm_adj = birgeRatio(estimate_adj, sd^2, c1984))
+            br_tm = birgeRatio(est, sd^2, rec_val), 
+            br_tm_adj = birgeRatio(estimate_adj, sd^2, rec_val))
 
 
 
@@ -96,7 +97,7 @@ pre1900 = ggplot(filter(cdat, year <= 1903)) +
   scale_y_continuous(limits = c(299600, 300000), 
                      breaks = 299600 + 50 * 0:8) + 
   scale_x_continuous(breaks = 1870 + 10*0:3) + 
-  geom_hline(yintercept = c1984, lty=2) + 
+  geom_hline(yintercept = rec_val, lty=2) + 
   labs(x = "", y = "") + 
   theme(panel.grid.minor = element_blank()) + 
   stdtheme
@@ -115,11 +116,11 @@ post1900 = ggplot(filter(cdat, year > 1902)) +
   scale_x_continuous(limits = c(1900, 1967),
                      breaks = 1900 + 10*0:6) + 
   coord_cartesian(clip = 'off') +
-  geom_hline(yintercept = c1984, lty=2) + 
+  geom_hline(yintercept = rec_val, lty=2) + 
   labs(x = "", y = "") + 
   annotate(geom = "text", size = 3.8,
-           x = 1914, y = c1984 + 1.5, 
-           label = c("1984 Value")) + 
+           x = 1914, y = rec_val + 1.0, 
+           label = c(paste(rec_val_year, "Recommended Value"))) + 
   stdtheme
 post1900
 
@@ -146,7 +147,7 @@ pre1900_un = ggplot(filter(cdat_hf, year <= 1903)) +
   scale_y_continuous(limits = c(299600, 300000), 
                      breaks = 299600 + 50 * 0:8) + 
   scale_x_continuous(breaks = 1870 + 10*0:3) + 
-  geom_hline(yintercept = 299792.458, lty=2) + 
+  geom_hline(yintercept = rec_val, lty=2) + 
   labs(x = "", y = "") + 
   theme(panel.grid.minor = element_blank()) + 
   stdtheme
@@ -164,11 +165,11 @@ post1900_un = ggplot(filter(cdat_hf, year > 1902)) +
                      breaks = 299750 + 10 * 0:9) + 
   scale_x_continuous(limits = c(1900, 1967),
                      breaks = 1900 + 10*0:6) + 
-  geom_hline(yintercept = 299792.458, lty=2) + 
+  geom_hline(yintercept = rec_val, lty=2) + 
   labs(x = "", y = "") + 
   annotate(geom = "text", size = 3.8,
-           x = 1914, y = c1984 + 1.5, 
-           label = c("1984 Value")) + 
+           x = 1914, y = rec_val + 1.0, 
+           label = c(paste(rec_val_year, "Recommended Value"))) + 
   stdtheme
 
 out_un = grid.arrange(pre1900_un, post1900_un, 
