@@ -205,8 +205,8 @@ avo = recvalPlot("N", "",
   geom_hline(yintercept = 0)
 
 
-foo = grid.arrange(invfsc, plnk, echg, emass, avo, ncol = 1)
-ggsave(plot = foo,
+fig2 = grid.arrange(invfsc, plnk, echg, emass, avo, ncol = 1)
+ggsave(plot = fig2,
        filename = "./graphics/Figure 2.pdf", 
        height = 18, width = 12, limitsize = FALSE)
 
