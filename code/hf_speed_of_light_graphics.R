@@ -131,6 +131,31 @@ out = grid.arrange(pre1900, post1900,
 ggsave(plot = out, "./graphics/HF speed of light adjusted.pdf", width = 12, height = 10)
 
 
+###---Combined plot for Figure 1A
+ggplot(cdat) + 
+  geom_pointrange(aes(x = year, 
+                      y = estimate_adj, 
+                      ymin = ifelse(estimate_adj - probable_error < 299740,
+                                    299740,
+                                    estimate_adj - probable_error), 
+                      ymax = ifelse(estimate_adj + probable_error > 300000, 
+                                    300000,
+                                    estimate_adj + probable_error))) + 
+  scale_y_continuous(limits = c(299750, 300000)) + 
+  scale_x_continuous(limits = c(1870, 1967),
+                     breaks = 1880 + 20*0:4) + 
+  coord_cartesian(clip = 'off') +
+  geom_hline(yintercept = rec_val, lty=2) + 
+  labs(x = "", y = "Estimate") + 
+  annotate(geom = "text", size = 3.95,
+           x = 1870, y = rec_val - 1.0,
+           hjust = 0, vjust = 1,
+           label = c(paste(rec_val_year, "Recommended Value"))) + 
+  stdtheme
+
+ggsave("./graphics/Figure 1A Single Pane.pdf", height = 10, width = 12)
+
+
 ##-------------------------------------------------------------------------------##
 ## Make plots without Birge's adjustments
 ##-------------------------------------------------------------------------------##
