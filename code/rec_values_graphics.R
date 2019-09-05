@@ -11,6 +11,7 @@
 # Get dplyr, ggplot2
 library(tidyverse)
 
+
 # Code for arranging plots
 library(cowplot)
 library(gridExtra)
@@ -215,25 +216,205 @@ ggsave(plot = fig2,
        height = 18, width = 12, limitsize = FALSE)
 
 
+# Build plots for each constant ----
 
-dat_for_grid %>% 
-  filter(constant == "h", year >= 1950, year <= 1975) %>% 
-  ggplot() + 
-  geom_hline(yintercept = 0, lty=2, color = "grey60") + 
-  geom_pointrange(aes(x = year, y = estimate*100000, 
-                      ymin = (estimate - error)*100000,
-                      ymax = (estimate + error)*100000),
-                  fatten = 0.75) + 
-  geom_line(aes(x = year, y = estimate)) + 
-  scale_x_continuous(breaks = seq(1950, 1975, 5)) +
-  labs(title = "", 
-       x = "", 
-       y = "Estimated Value") +
+# Clean up old version of Figure 2
+rm("invfsc", "plnk", "echg", "emass", "avo")
+
+# Inverse fine structure
+invfsc <- dat_for_grid %>% 
+  filter(constant == "1/alpha", year >= 1950, year <= 1975) %>%
+  mutate(rescale_multiple = 7300) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 2, color = "grey60") +
+  geom_pointrange(aes(x = year, y = estimate * rescale_multiple, 
+                      ymin = (estimate - error) * rescale_multiple,
+                      ymax = (estimate + error) * rescale_multiple),
+                  fatten = 0.75) +
+  geom_line(
+    aes(x = year, y = estimate * rescale_multiple), 
+    size = 0.4
+  )  +
+  scale_x_continuous(
+    name   = "Year of estimate",
+    breaks = seq(1950, 1975, 5),
+  ) +
+  scale_y_continuous(
+    name   = "Deviation from 2014 recommended value  (ppm)",
+    limits = c(-2.5, 25),
+    breaks = seq(0, 25, 5),
+    expand = c(0, 0)
+  ) +
+  ggtitle(
+    expression("Inverse Fine Structure Constant, " ~ alpha^-1 ~ "")
+  ) +
   theme_classic() +
-  theme(text = element_text(family = "Times"),                            
-        axis.text = element_text(size = 8),
-        axis.title = element_text(size = 8), 
-        axis.line.y = element_line(colour = "black"),
-        title = element_text(size = 8),
-        axis.title.x = element_text(hjust = 1),
-        axis.title.y = element_text(hjust = 1))
+  theme(
+    text = element_text(family = "Times"),                            
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12), 
+    axis.line.y = element_line(colour = "black"),
+    title = element_text(size = 14),
+    axis.title.x = element_text(hjust = 1),
+    axis.title.y = element_text(hjust = 1)
+  )
+
+# Planks
+# rescale_multiple <- 100000
+
+plnk <- dat_for_grid %>% 
+  filter(constant == "h", year >= 1950, year <= 1975) %>% 
+  mutate(rescale_multiple = 100000) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 2, color = "grey60") +
+  geom_pointrange(aes(x = year, y = estimate * rescale_multiple, 
+                      ymin = (estimate - error) * rescale_multiple,
+                      ymax = (estimate + error) * rescale_multiple),
+                  fatten = 0.75) +
+  geom_line(
+    aes(x = year, y = estimate * rescale_multiple), 
+    size = 0.4
+  )  +
+  scale_x_continuous(
+    name   = "Year of estimate",
+    breaks = seq(1950, 1975, 5),
+  ) +
+  scale_y_continuous(
+    name   = "Deviation from 2014 recommended value (ppm)",
+    limits = c(-150, 50),
+    breaks = seq(-150, 50, 50),
+    expand = c(0, 0)
+  ) +
+  ggtitle("Planck's Constant, h") +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times"),                            
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12), 
+    axis.line.y = element_line(colour = "black"),
+    title = element_text(size = 14),
+    axis.title.x = element_text(hjust = 1),
+    axis.title.y = element_text(hjust = 1)
+  )
+
+# Electron charge
+echg <- dat_for_grid %>% 
+  filter(constant == "e", year >= 1950, year <= 1975) %>% 
+  mutate(rescale_multiple = 260500) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 2, color = "grey60") +
+  geom_pointrange(aes(x = year, y = estimate * rescale_multiple, 
+                      ymin = (estimate - error) * rescale_multiple,
+                      ymax = (estimate + error) * rescale_multiple),
+                  fatten = 0.75) +
+  geom_line(
+    aes(x = year, y = estimate * rescale_multiple), 
+    size = 0.4
+  )  +
+  scale_x_continuous(
+    name   = "Year of estimate",
+    breaks = seq(1950, 1975, 5),
+  ) +
+  scale_y_continuous(
+    name   = "Deviation from 2014 recommended value (ppm)",
+    limits = c(-200, 25),
+    breaks = seq(-200, 25, 50),
+    expand = c(0, 0)
+  ) +
+  ggtitle(
+    "Electron Charge, e"
+  ) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times"),                            
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12), 
+    axis.line.y = element_line(colour = "black"),
+    title = element_text(size = 14),
+    axis.title.x = element_text(hjust = 1),
+    axis.title.y = element_text(hjust = 1)
+  )
+
+# Electron mass
+
+emass <- dat_for_grid %>% 
+  filter(constant == "m_e", year >= 1950, year <= 1975) %>% 
+  mutate(rescale_multiple = 124500) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 2, color = "grey60") +
+  geom_pointrange(aes(x = year, y = estimate * rescale_multiple, 
+                      ymin = (estimate - error) * rescale_multiple,
+                      ymax = (estimate + error) * rescale_multiple),
+                  fatten = 0.75) +
+  geom_line(
+    aes(x = year, y = estimate * rescale_multiple), 
+    size = 0.4
+  )  +
+  scale_x_continuous(
+    name   = "Year of estimate",
+    breaks = seq(1950, 1975, 5),
+  ) +
+  scale_y_continuous(
+    name   = "Deviation from 2014 recommended value (ppm)",
+    limits = c(-200, 30),
+    breaks = seq(-200, 30 , 25),
+    expand = c(0, 0)
+  ) +
+  ggtitle(
+    expression("Electron Mass," ~ m[e] ~ "")
+  ) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times"),                            
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12), 
+    axis.line.y = element_line(colour = "black"),
+    title = element_text(size = 14),
+    axis.title.x = element_text(hjust = 1),
+    axis.title.y = element_text(hjust = 1)
+  )
+
+# Avogadro's number
+avo <- dat_for_grid %>% 
+  filter(constant == "N", year >= 1950, year <= 1975) %>% 
+  mutate(rescale_multiple = 50000) %>% 
+  ggplot() +
+  geom_hline(yintercept = 0, lty = 2, color = "grey60") +
+  geom_pointrange(aes(x = year, y = estimate * rescale_multiple, 
+                      ymin = (estimate - error) * rescale_multiple,
+                      ymax = (estimate + error) * rescale_multiple),
+                  fatten = 0.75) +
+  geom_line(
+    aes(x = year, y = estimate * rescale_multiple), 
+    size = 0.4
+  )  +
+  scale_x_continuous(
+    name   = "Year of estimate",
+    breaks = seq(1950, 1975, 5),
+  ) +
+  scale_y_continuous(
+    name   = "Deviation from 2014 recommended value (ppm)",
+    limits = c(-25, 150),
+    breaks = seq(0, 150, 50),
+    expand = c(0, 0)
+  ) +
+  ggtitle(
+    "Avogadro's Number, N"
+  ) +
+  theme_classic() +
+  theme(
+    text = element_text(family = "Times"),                            
+    axis.text = element_text(size = 12),
+    axis.title = element_text(size = 12), 
+    axis.line.y = element_line(colour = "black"),
+    title = element_text(size = 14),
+    axis.title.x = element_text(hjust = 1),
+    axis.title.y = element_text(hjust = 1)
+  )
+
+# Final figure 
+fig2 = plot_grid(invfsc, plnk, echg, emass, avo, ncol = 1)
+ggsave(plot = fig2,
+       filename = "./graphics/Figure 2.pdf", 
+       height = 20, width = 8, limitsize = FALSE)
+
