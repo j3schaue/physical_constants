@@ -189,7 +189,8 @@ main_plot <- cdat %>%
            label = c(paste(rec_val_year, "Recommended Value")),
            family = "Times") + 
   theme_classic() +
-  theme(text = element_text(family = "Times"),                            axis.text = element_text(size = 14),
+  theme(text = element_text(family = "Times"),                            
+        axis.text = element_text(size = 14),
         axis.title = element_text(size = 14), 
         title = element_text(size = 16),
         axis.title.x = element_text(hjust = 1),

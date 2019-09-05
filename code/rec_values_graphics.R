@@ -11,6 +11,10 @@
 # Get dplyr, ggplot2
 library(tidyverse)
 
+# Code for arranging plots
+library(cowplot)
+library(gridExtra)
+
 # Standard theme for graphics
 stdtheme = theme(panel.grid.minor = element_blank(), 
                  axis.ticks = element_blank(),
@@ -168,7 +172,7 @@ dat_for_grid = rvs %>%
   group_by(constant) %>%
   summarize(rec_val = estimate) %>%
   left_join(., rvs) %>%
-  filter(constant %in% constants_for_grid$cnst) %>%
+  filter(constant %in% c(constants_for_grid$cnst, "c")) %>%
   mutate(deviation = estimate - rec_val) %>%
   select(-estimate) %>%
   rename(estimate = deviation)
@@ -212,3 +216,24 @@ ggsave(plot = fig2,
 
 
 
+dat_for_grid %>% 
+  filter(constant == "h", year >= 1950, year <= 1975) %>% 
+  ggplot() + 
+  geom_hline(yintercept = 0, lty=2, color = "grey60") + 
+  geom_pointrange(aes(x = year, y = estimate*100000, 
+                      ymin = (estimate - error)*100000,
+                      ymax = (estimate + error)*100000),
+                  fatten = 0.75) + 
+  geom_line(aes(x = year, y = estimate)) + 
+  scale_x_continuous(breaks = seq(1950, 1975, 5)) +
+  labs(title = "", 
+       x = "", 
+       y = "Estimated Value") +
+  theme_classic() +
+  theme(text = element_text(family = "Times"),                            
+        axis.text = element_text(size = 8),
+        axis.title = element_text(size = 8), 
+        axis.line.y = element_line(colour = "black"),
+        title = element_text(size = 8),
+        axis.title.x = element_text(hjust = 1),
+        axis.title.y = element_text(hjust = 1))
